@@ -4,32 +4,35 @@ import zmq
 
 context = zmq.Context()
 socket = context.socket(zmq.REP)
-socket.bind('tcp://*:5555')
+socket.bind("tcp://*:5555")
 
 try:
-    f = open('data.json')
+    f = open("data.json")
 except FileNotFoundError:
     data = {}
-    f = open('data.json', 'w')
+    f = open("data.json", "w")
     json.dump(data, f)
 else:
     data = json.load(f)
 finally:
     f.close()
 
+
 def save():
-    with open('data.json', 'w') as f:
+    with open("data.json", "w") as f:
         json.dump(data, f)
+
 
 def process(text):
     command, option = text.strip().split()
-    if command == 'get':
+    if command == "get":
         key = option
         return data[key]
-    if command == 'set':
-        key, value = option.split('=')
+    if command == "set":
+        key, value = option.split("=")
         data[key] = value
-        return 'OK'
+        return "OK"
+
 
 atexit.register(save)
 
